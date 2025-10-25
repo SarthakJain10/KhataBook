@@ -10,6 +10,9 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata = {
   title: "KhataBook",
   description: "One Stop Finance Management Platform",
+  icons: {
+    icon: "/logo.jpg"
+  }
 };
 
 export default function RootLayout({ children }) {
