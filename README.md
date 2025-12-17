@@ -112,6 +112,7 @@ khatabook/
 ---
 
 ##  Application Flowchart
+<img width="2825" height="886" alt="Khatabook-flowchart" src="https://github.com/user-attachments/assets/a8580ee0-b4d2-4f5e-843c-c70b4ae3c1d3" />
 
 
 
