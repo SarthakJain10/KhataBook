@@ -40,13 +40,25 @@ Khatabook is a full-stack expense tracking web application that helps users mana
 
 ```bash
 khatabook/
-├── app/              # Next.js App Router pages & layouts
-├── components/       # Reusable UI components
-├── lib/              # Utility functions & helpers
-├── prisma/           # Prisma schema & migrations
-├── public/           # Static assets
-├── styles/           # Global styles (Tailwind)
-└── README.md         # Project documentation
+├── actions/ # Server actions (transactions, mutations)
+├── app/ # Next.js App Router (pages, layouts, routes)
+├── components/ # Reusable UI components
+├── data/ # Static data & constants
+├── hooks/ # Custom React hooks
+├── lib/ # Utility functions & helpers
+├── prisma/ # Prisma schema & database migrations
+├── public/ # Static assets (images, icons)
+├── .gitignore # Git ignored files
+├── components.json # UI components configuration
+├── eslint.config.mjs # ESLint configuration
+├── jsconfig.json # JS path aliases & config
+├── middleware.js # Next.js middleware (auth, protection)
+├── next.config.mjs # Next.js configuration
+├── postcss.config.mjs # PostCSS configuration
+├── package.json # Project dependencies & scripts
+├── package-lock.json # Dependency lock file
+├── LICENSE # MIT License
+└── README.md # Project documentation
 ```
 
 ---
