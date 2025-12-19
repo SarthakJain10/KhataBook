@@ -14,7 +14,7 @@ const header = async () => {
         <Link href="/">
           <div id="company" className="flex items-center gap-3">
             <img 
-              src="/logo.jpg" 
+              src="/favicon.jpg" 
               alt="logo" 
               className="w-13 h-13 rounded-full object-cover border border-gray-700 shadow-md"
             />

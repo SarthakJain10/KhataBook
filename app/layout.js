@@ -11,7 +11,7 @@ export const metadata = {
   title: "KhataBook",
   description: "One Stop Finance Management Platform",
   icons: {
-    icon: "/logo.jpg"
+    icon: "/favicon.jpg"
   }
 };
 
@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <html lang="en">
         <head>
-          <link rel="icon" href="/logo.jpg" sizes="any" />
+          <link rel="icon" href="/favicon.jpg" sizes="any" />
         </head>
         <body className={`${inter.className}`}>
           <Header />
