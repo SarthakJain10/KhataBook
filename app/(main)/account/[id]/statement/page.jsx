@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import StatementForm from "../../_components/statement-filter";
 import { BarLoader } from "react-spinners";
 
+
 export default async function StatementPage({ params }) {
   const accountId = params.id;
   const accountData = await getAccountWithTransactions(accountId);
@@ -12,6 +13,8 @@ export default async function StatementPage({ params }) {
   if (!accountData) notFound();
 
   const { transactions, ...account } = accountData;
+
+  const accountBalance = account.balance;
 
 
   return (
@@ -47,7 +50,10 @@ export default async function StatementPage({ params }) {
         <Suspense
             fallback={<BarLoader className="mt-4" width={"100%"} color="#9333ea" />}
         >
-            <StatementForm transactions={transactions} />
+            <StatementForm 
+                transactions={transactions} 
+                accountBalance={accountBalance}  
+            />
         </Suspense>
 
         <Link

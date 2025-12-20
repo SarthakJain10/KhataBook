@@ -8,7 +8,7 @@ import autoTable from "jspdf-autotable";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 
-export default function StatementForm({ transactions }) {
+export default function StatementForm({ transactions, accountBalance }) {
   const [dateRange, setDateRange] = useState({ start: "", end: "" });
   const [quickRange, setQuickRange] = useState("");
   const [amountRange, setAmountRange] = useState({ min: "", max: "" });
@@ -38,7 +38,9 @@ export default function StatementForm({ transactions }) {
     // Date Filter
     if (dateRange.start && dateRange.end) {
       const start = new Date(dateRange.start);
+      start.setHours(0, 0, 0, 0);
       const end = new Date(dateRange.end);
+      end.setHours(23, 59, 59, 999);
 
       result = result.filter((t) => {
         const tDate = new Date(t.date);
@@ -69,6 +71,7 @@ export default function StatementForm({ transactions }) {
     return result;
   }, [transactions, dateRange, amountRange, typeFilter]);
 
+  // RESET Functionality 
   const clearFilters = () => {
     setDateRange({ start: "", end: "" });
     setQuickRange("");
@@ -77,88 +80,108 @@ export default function StatementForm({ transactions }) {
     setShowTable(false);
   };
 
-    const exportPDF = () => {
-        const doc = new jsPDF();
+  // Calculating Balance 
+  const allSortedDesc = [...transactions].sort(
+    (a, b) => new Date(b.date) - new Date(a.date)
+  );
 
-        const tableColumn = ["Date", "Description", "Amount"];
-        const tableRows = filteredTransactions.map((t) => [
-            new Date(t.date).toLocaleDateString(),
-            t.description,
-            `${t.type === "EXPENSE" ? "-" : "+"}${t.amount.toFixed(2)}`,
-        ]);
+  let running = accountBalance;  
+  const balanceMap = {};
 
-        const totalAmount = filteredTransactions.reduce(
-            (sum, t) => (t.type === "EXPENSE" ? sum - t.amount : sum + t.amount),
-            0
-        );
+  allSortedDesc.forEach((t) => {
+    const amount = Number(t.amount);
 
-        // Draw table
-        autoTable(doc, {
-            startY: 45,
-            head: [tableColumn],
-            body: tableRows,
-            theme: "grid",
-            headStyles: { fillColor: [63, 81, 181], textColor: 255, fontStyle: "bold" },
-            alternateRowStyles: { fillColor: [240, 240, 240] },
-            styles: { cellPadding: 3, fontSize: 10 },
-        });
+    const afterBalance = running;
 
-        const finalY = doc.lastAutoTable.finalY || 45;
-
-        doc.setFontSize(11);
-        doc.setFont(undefined, "bold");
-        doc.setTextColor(255, 255, 255);
-        doc.setFillColor(63, 81, 181);
-
-        const pageWidth = doc.internal.pageSize.getWidth();
-        const padding = 14;
-        const rowHeight = 10;
-
-        doc.rect(padding, finalY + 5, pageWidth - 2 * padding, rowHeight, "F");
-
-        // Add Total text
-        doc.text("Total", pageWidth - 60, finalY + 12);
-        doc.text(`${totalAmount.toFixed(2)}`, pageWidth - 20, finalY + 12, { align: "right" });
-
-        doc.save("statement.pdf");
+    balanceMap[t.id] = {
+      crdr: t.type === "EXPENSE" ? "DR" : "CR",
+      balance: afterBalance,
     };
 
+    if (t.type === "EXPENSE") {
+      running = afterBalance + amount;
+    } else {
+      running = afterBalance - amount;
+    }
+  });
 
-    // Excel Export using ExcelJS
-    const exportExcel = async () => {
-        const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet("Statement");
 
-        // Define columns
-        worksheet.columns = [
-            { header: "Date", key: "date", width: 15 },
-            { header: "Description", key: "description", width: 30 },
-            { header: "Amount", key: "amount", width: 15 },
-        ];
 
-        // Add rows
-        filteredTransactions.forEach((t) => {
-            worksheet.addRow({
-            date: new Date(t.date).toLocaleDateString(),
-            description: t.description,
-            amount: t.type === "EXPENSE" ? -t.amount : t.amount,
-            });
+  // For PDF  
+  const exportPDF = () => {
+    const doc = new jsPDF();
+
+    const sorted = [...filteredTransactions].sort(
+      (a, b) => new Date(a.date) - new Date(b.date)
+    );
+
+    const tableRows = sorted.map((t) => [
+      new Date(t.date).toLocaleDateString(),
+      t.description,
+      balanceMap[t.id].crdr,
+      t.type === "EXPENSE"
+        ? `-${Number(t.amount).toFixed(2)}`
+        : `+${Number(t.amount).toFixed(2)}`,
+      balanceMap[t.id].balance.toFixed(2),
+    ]);
+
+
+    autoTable(doc, {
+      startY: 20,
+      head: [["Date", "Description", "CR/DR", "Amount", "Balance"]],
+      body: tableRows,
+      theme: "grid",
+      headStyles: {
+        fillColor: [63, 81, 181],
+        textColor: 255,
+        fontStyle: "bold",
+      },
+      alternateRowStyles: { fillColor: [240, 240, 240] },
+      styles: { cellPadding: 3, fontSize: 10 },
     });
 
-    // Optional: style header
+    doc.save("statement.pdf");
+  };
+
+  // For Excel 
+  const exportExcel = async () => {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Statement");
+
+    worksheet.columns = [
+      { header: "Date", key: "date", width: 15 },
+      { header: "Description", key: "description", width: 30 },
+      { header: "CR/DR", key: "crdr", width: 10 },
+      { header: "Amount", key: "amount", width: 15 },
+      { header: "Balance", key: "balance", width: 18 },
+    ];
+
+    const sorted = [...filteredTransactions].sort(
+      (a, b) => new Date(a.date) - new Date(b.date)
+    );
+
+    sorted.forEach((t) => {
+      const amount = Number(t.amount);
+
+      worksheet.addRow({
+        date: new Date(t.date).toLocaleDateString(),
+        description: t.description,
+        crdr: balanceMap[t.id].crdr,
+        amount: t.type === "EXPENSE" ? -amount : amount,
+        balance: balanceMap[t.id].balance,
+      });
+    });
+
     worksheet.getRow(1).font = { bold: true };
     worksheet.getRow(1).alignment = { horizontal: "center" };
 
-    // Generate buffer
     const buffer = await workbook.xlsx.writeBuffer();
-
-    // Save file
     const blob = new Blob([buffer], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
-    saveAs(blob, "statement.xlsx");
-    };
 
+    saveAs(blob, "statement.xlsx");
+  };
 
   return (
     <div className="space-y-6">
