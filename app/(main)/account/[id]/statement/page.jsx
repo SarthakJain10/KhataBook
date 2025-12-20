@@ -43,7 +43,7 @@ export default async function StatementPage({ params }) {
             </div>
         </div>
 
-        {/* Transactions Table */}
+        {/* Filter + Transactions Table */}
         <Suspense
             fallback={<BarLoader className="mt-4" width={"100%"} color="#9333ea" />}
         >

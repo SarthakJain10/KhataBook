@@ -3,6 +3,10 @@
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
 
 export default function StatementForm({ transactions }) {
   const [dateRange, setDateRange] = useState({ start: "", end: "" });
@@ -73,6 +77,89 @@ export default function StatementForm({ transactions }) {
     setShowTable(false);
   };
 
+    const exportPDF = () => {
+        const doc = new jsPDF();
+
+        const tableColumn = ["Date", "Description", "Amount"];
+        const tableRows = filteredTransactions.map((t) => [
+            new Date(t.date).toLocaleDateString(),
+            t.description,
+            `${t.type === "EXPENSE" ? "-" : "+"}${t.amount.toFixed(2)}`,
+        ]);
+
+        const totalAmount = filteredTransactions.reduce(
+            (sum, t) => (t.type === "EXPENSE" ? sum - t.amount : sum + t.amount),
+            0
+        );
+
+        // Draw table
+        autoTable(doc, {
+            startY: 45,
+            head: [tableColumn],
+            body: tableRows,
+            theme: "grid",
+            headStyles: { fillColor: [63, 81, 181], textColor: 255, fontStyle: "bold" },
+            alternateRowStyles: { fillColor: [240, 240, 240] },
+            styles: { cellPadding: 3, fontSize: 10 },
+        });
+
+        const finalY = doc.lastAutoTable.finalY || 45;
+
+        doc.setFontSize(11);
+        doc.setFont(undefined, "bold");
+        doc.setTextColor(255, 255, 255);
+        doc.setFillColor(63, 81, 181);
+
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const padding = 14;
+        const rowHeight = 10;
+
+        doc.rect(padding, finalY + 5, pageWidth - 2 * padding, rowHeight, "F");
+
+        // Add Total text
+        doc.text("Total", pageWidth - 60, finalY + 12);
+        doc.text(`${totalAmount.toFixed(2)}`, pageWidth - 20, finalY + 12, { align: "right" });
+
+        doc.save("statement.pdf");
+    };
+
+
+    // Excel Export using ExcelJS
+    const exportExcel = async () => {
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("Statement");
+
+        // Define columns
+        worksheet.columns = [
+            { header: "Date", key: "date", width: 15 },
+            { header: "Description", key: "description", width: 30 },
+            { header: "Amount", key: "amount", width: 15 },
+        ];
+
+        // Add rows
+        filteredTransactions.forEach((t) => {
+            worksheet.addRow({
+            date: new Date(t.date).toLocaleDateString(),
+            description: t.description,
+            amount: t.type === "EXPENSE" ? -t.amount : t.amount,
+            });
+    });
+
+    // Optional: style header
+    worksheet.getRow(1).font = { bold: true };
+    worksheet.getRow(1).alignment = { horizontal: "center" };
+
+    // Generate buffer
+    const buffer = await workbook.xlsx.writeBuffer();
+
+    // Save file
+    const blob = new Blob([buffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    saveAs(blob, "statement.xlsx");
+    };
+
+
   return (
     <div className="space-y-6">
       {/* FILTER CARD */}
@@ -101,7 +188,6 @@ export default function StatementForm({ transactions }) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
 
-                {/* Start Date */}
                 <Input
                 type="date"
                 value={dateRange.start}
@@ -111,7 +197,6 @@ export default function StatementForm({ transactions }) {
                 className="rounded-xl focus:ring-2 focus:ring-purple-500"
                 />
 
-                {/* End Date */}
                 <Input
                 type="date"
                 value={dateRange.end}
@@ -211,9 +296,42 @@ export default function StatementForm({ transactions }) {
         </div>
       </div>
 
-      {/* RESULTS TABLE */}
+      {/* RESULTS SECTION */}
       {showTable && (
         <div className="border rounded-2xl overflow-hidden shadow-sm bg-white">
+            {filteredTransactions.length > 0 && (
+                <div
+                className="
+                    flex flex-col gap-3
+                    px-5 py-4 border-b bg-gray-50
+                    sm:flex-row sm:items-center sm:justify-between
+                "
+                >
+                    <h3 className="text-lg font-semibold">
+                        Filtered Statement
+                    </h3>
+
+                    <div className="flex flex-wrap gap-2 sm:justify-end">
+                        <Button
+                            variant="outline"
+                            className="rounded-xl w-full sm:w-auto"
+                            onClick={exportPDF}
+                        >
+                            Download PDF
+                        </Button>
+
+                        <Button
+                            variant="outline"
+                            className="rounded-xl w-full sm:w-auto"
+                            onClick={exportExcel}
+                        >
+                            Download Excel
+                        </Button>
+                    </div>
+                </div>
+            )}
+
+
           {filteredTransactions.length === 0 ? (
             <div className="p-10 text-center text-gray-500">
               No transactions found for selected filters 😕
