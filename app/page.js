@@ -1,14 +1,18 @@
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import Image from "next/image";
 import {
   howItWorksData,
   testimonialsData,
   featuresData,
 } from "@/data/landing";
 import HeroSection from "@/components/hero";
+import Column from "@/components/column";
 
 export default function Home() {
+
+  const col1 = testimonialsData.slice(0, 4);
+  const col2 = testimonialsData.slice(4, 8);
+  const col3 = testimonialsData.slice(8, 12);
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 dark:text-white transition-colors">
 
@@ -87,54 +91,49 @@ export default function Home() {
         </div>
       </section>
 
+      <section
+        id="testimonials"
+        className="
+          py-14 sm:py-16 md:py-20 
+          bg-gray-50 dark:bg-neutral-900
+          transition-colors overflow-hidden
+        "
+      >
+        <div className="max-w-7xl mx-auto px-4 group">
 
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 bg-gray-50 dark:bg-neutral-900 transition-colors overflow-hidden">
-        <div className="container mx-auto px-4">
-
-          <h2 className="text-3xl font-bold text-center mb-16 text-gray-900 dark:text-white">
+          <h2
+            className="
+              text-2xl sm:text-3xl md:text-4xl font-bold
+              text-center mb-10 sm:mb-12 md:mb-16
+              text-gray-900 dark:text-white
+              tracking-tight
+            "
+          >
             What Our Users Say
           </h2>
 
-          {/* Infinite scroll */}
-          <div className="relative w-full overflow-hidden">
-            <div className="flex animate-scroll">
+          <div
+            className="
+              grid
+              grid-cols-1
+              md:grid-cols-2
+              lg:grid-cols-3
+              gap-5 sm:gap-6 md:gap-8 lg:gap-10
+            "
+          >
+            <Column data={col1} direction="t2b" />
 
-              {testimonialsData.concat(testimonialsData).map((testimonial, index) => (
-                <Card
-                  key={index}
-                  className="p-6 mr-6 flex-shrink-0 w-80 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 transition-colors"
-                >
-                  <CardContent className="pt-4">
-                    <div className="flex items-center mb-4">
-                      <Image
-                        src={testimonial.image}
-                        alt={testimonial.name}
-                        width={40}
-                        height={40}
-                        className="w-10 h-10 rounded-full"
-                      />
-                      <div className="ml-4">
-                        <div className="font-semibold text-gray-900 dark:text-white">
-                          {testimonial.name}
-                        </div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                          {testimonial.role}
-                        </div>
-                      </div>
-                    </div>
+            <div className="hidden md:block">
+              <Column data={col2} direction="b2t" />
+            </div>
 
-                    <p className="text-gray-600 dark:text-gray-300">
-                      {testimonial.quote}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
-
+            <div className="hidden lg:block">
+              <Column data={col3} direction="t2b" />
             </div>
           </div>
         </div>
       </section>
+
     </div>
   );
 }
