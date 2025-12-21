@@ -186,9 +186,15 @@ export default function StatementForm({ transactions, accountBalance }) {
   return (
     <div className="space-y-6">
       {/* FILTER CARD */}
-      <div className="p-6 border rounded-2xl shadow-md bg-white space-y-6">
+      <div className="p-6 border rounded-2xl shadow-md 
+          bg-white dark:bg-neutral-900 
+          border-gray-200 dark:border-neutral-700 
+          text-gray-900 dark:text-gray-100
+          space-y-6"
+      >
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold">Filters</h2>
+
           {(dateRange.start ||
             dateRange.end ||
             amountRange.min ||
@@ -198,7 +204,9 @@ export default function StatementForm({ transactions, accountBalance }) {
             <Button
               variant="ghost"
               onClick={clearFilters}
-              className="text-sm underline text-gray-600 hover:text-black"
+              className="text-sm underline 
+                text-gray-600 hover:text-black 
+                dark:text-gray-300 dark:hover:text-white"
             >
               Reset
             </Button>
@@ -207,58 +215,66 @@ export default function StatementForm({ transactions, accountBalance }) {
 
         {/* Date Range */}
         <div className="space-y-2">
-            <p className="font-medium text-sm">Select Date Range</p>
+          <p className="font-medium text-sm">Select Date Range</p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <Input
+              type="date"
+              value={dateRange.start}
+              onChange={(e) =>
+                setDateRange((p) => ({ ...p, start: e.target.value }))
+              }
+              className="rounded-xl 
+                bg-white dark:bg-neutral-800 
+                border-gray-300 dark:border-neutral-700
+                text-gray-900 dark:text-gray-100
+                focus:ring-2 focus:ring-purple-500"
+            />
 
-                <Input
-                type="date"
-                value={dateRange.start}
-                onChange={(e) =>
-                    setDateRange((p) => ({ ...p, start: e.target.value }))
-                }
-                className="rounded-xl focus:ring-2 focus:ring-purple-500"
-                />
+            <Input
+              type="date"
+              value={dateRange.end}
+              onChange={(e) =>
+                setDateRange((p) => ({ ...p, end: e.target.value }))
+              }
+              className="rounded-xl 
+                bg-white dark:bg-neutral-800 
+                border-gray-300 dark:border-neutral-700
+                text-gray-900 dark:text-gray-100
+                focus:ring-2 focus:ring-purple-500"
+            />
 
-                <Input
-                type="date"
-                value={dateRange.end}
-                onChange={(e) =>
-                    setDateRange((p) => ({ ...p, end: e.target.value }))
-                }
-                className="rounded-xl focus:ring-2 focus:ring-purple-500"
-                />
+            {/* Quick Buttons */}
+            <div className="col-span-1 sm:col-span-2 lg:col-span-2 flex flex-wrap gap-2">
+              <Button
+                variant={quickRange === "last_week" ? "default" : "outline"}
+                onClick={() => applyQuickRange("last_week")}
+                className="rounded-xl flex-1 min-w-[110px] 
+                  dark:border-neutral-700 dark:hover:bg-neutral-800"
+              >
+                Last Week
+              </Button>
 
-                {/* Quick Range Buttons */}
-                <div className="col-span-1 sm:col-span-2 lg:col-span-2 flex flex-wrap gap-2">
+              <Button
+                variant={quickRange === "last_month" ? "default" : "outline"}
+                onClick={() => applyQuickRange("last_month")}
+                className="rounded-xl flex-1 min-w-[110px]
+                  dark:border-neutral-700 dark:hover:bg-neutral-800"
+              >
+                Last Month
+              </Button>
 
-                <Button
-                    variant={quickRange === "last_week" ? "default" : "outline"}
-                    onClick={() => applyQuickRange("last_week")}
-                    className="rounded-xl flex-1 min-w-[110px]"
-                >
-                    Last Week
-                </Button>
-
-                <Button
-                    variant={quickRange === "last_month" ? "default" : "outline"}
-                    onClick={() => applyQuickRange("last_month")}
-                    className="rounded-xl flex-1 min-w-[110px]"
-                >
-                    Last Month
-                </Button>
-
-                <Button
-                    variant={quickRange === "last_year" ? "default" : "outline"}
-                    onClick={() => applyQuickRange("last_year")}
-                    className="rounded-xl flex-1 min-w-[110px]"
-                >
-                    Last Year
-                </Button>
-                </div>
+              <Button
+                variant={quickRange === "last_year" ? "default" : "outline"}
+                onClick={() => applyQuickRange("last_year")}
+                className="rounded-xl flex-1 min-w-[110px]
+                  dark:border-neutral-700 dark:hover:bg-neutral-800"
+              >
+                Last Year
+              </Button>
             </div>
+          </div>
         </div>
-
 
         {/* Amount Range */}
         <div className="space-y-2">
@@ -272,7 +288,11 @@ export default function StatementForm({ transactions, accountBalance }) {
               onChange={(e) =>
                 setAmountRange((p) => ({ ...p, min: e.target.value }))
               }
-              className="rounded-xl focus:ring-2 focus:ring-purple-500"
+              className="rounded-xl 
+                bg-white dark:bg-neutral-800 
+                border-gray-300 dark:border-neutral-700
+                text-gray-900 dark:text-gray-100
+                focus:ring-2 focus:ring-purple-500"
             />
 
             <Input
@@ -282,12 +302,16 @@ export default function StatementForm({ transactions, accountBalance }) {
               onChange={(e) =>
                 setAmountRange((p) => ({ ...p, max: e.target.value }))
               }
-              className="rounded-xl focus:ring-2 focus:ring-purple-500"
+              className="rounded-xl 
+                bg-white dark:bg-neutral-800 
+                border-gray-300 dark:border-neutral-700
+                text-gray-900 dark:text-gray-100
+                focus:ring-2 focus:ring-purple-500"
             />
           </div>
         </div>
 
-        {/* Type */}
+        {/* Type Filter */}
         <div className="space-y-2">
           <p className="font-medium text-sm">Transaction Type</p>
 
@@ -296,11 +320,13 @@ export default function StatementForm({ transactions, accountBalance }) {
               <button
                 key={type}
                 onClick={() => setTypeFilter(type)}
-                className={`px-4 py-2 rounded-xl border transition ${
-                  typeFilter === type
-                    ? "bg-purple-600 text-white border-purple-600"
-                    : "hover:bg-gray-100"
-                }`}
+                className={`px-4 py-2 rounded-xl border transition 
+                  dark:border-neutral-700
+                  ${
+                    typeFilter === type
+                      ? "bg-purple-600 text-white border-purple-600"
+                      : "hover:bg-gray-100 dark:hover:bg-neutral-800"
+                  }`}
               >
                 {type.charAt(0).toUpperCase() + type.slice(1)}
               </button>
@@ -312,56 +338,61 @@ export default function StatementForm({ transactions, accountBalance }) {
         <div className="flex justify-end">
           <button
             onClick={() => setShowTable(true)}
-            className="bg-purple-600 text-white px-6 py-2 rounded-xl hover:bg-purple-700 shadow-sm"
+            className="bg-purple-600 text-white px-6 py-2 rounded-xl 
+              hover:bg-purple-700 shadow-sm"
           >
             View Transactions →
           </button>
         </div>
       </div>
 
-      {/* RESULTS SECTION */}
+      {/* RESULTS */}
       {showTable && (
-        <div className="border rounded-2xl overflow-hidden shadow-sm bg-white">
-            {filteredTransactions.length > 0 && (
-                <div
-                className="
-                    flex flex-col gap-3
-                    px-5 py-4 border-b bg-gray-50
-                    sm:flex-row sm:items-center sm:justify-between
-                "
+        <div
+          className="border rounded-2xl overflow-hidden shadow-sm 
+          bg-white dark:bg-neutral-900
+          border-gray-200 dark:border-neutral-700"
+        >
+          {filteredTransactions.length > 0 && (
+            <div
+              className="
+                flex flex-col gap-3
+                px-5 py-4 border-b
+                bg-gray-50 dark:bg-neutral-800
+                border-gray-200 dark:border-neutral-700
+                sm:flex-row sm:items-center sm:justify-between"
+            >
+              <h3 className="text-lg font-semibold">Filtered Statement</h3>
+
+              <div className="flex flex-wrap gap-2 sm:justify-end">
+                <Button
+                  variant="outline"
+                  className="rounded-xl w-full sm:w-auto 
+                    dark:border-neutral-700 dark:hover:bg-neutral-800"
+                  onClick={exportPDF}
                 >
-                    <h3 className="text-lg font-semibold">
-                        Filtered Statement
-                    </h3>
+                  Download PDF
+                </Button>
 
-                    <div className="flex flex-wrap gap-2 sm:justify-end">
-                        <Button
-                            variant="outline"
-                            className="rounded-xl w-full sm:w-auto"
-                            onClick={exportPDF}
-                        >
-                            Download PDF
-                        </Button>
-
-                        <Button
-                            variant="outline"
-                            className="rounded-xl w-full sm:w-auto"
-                            onClick={exportExcel}
-                        >
-                            Download Excel
-                        </Button>
-                    </div>
-                </div>
-            )}
-
+                <Button
+                  variant="outline"
+                  className="rounded-xl w-full sm:w-auto 
+                    dark:border-neutral-700 dark:hover:bg-neutral-800"
+                  onClick={exportExcel}
+                >
+                  Download Excel
+                </Button>
+              </div>
+            </div>
+          )}
 
           {filteredTransactions.length === 0 ? (
-            <div className="p-10 text-center text-gray-500">
-              No transactions found for selected filters 😕
+            <div className="p-10 text-center text-gray-500 dark:text-gray-400">
+              No transactions found 😕
             </div>
           ) : (
             <table className="w-full">
-              <thead className="bg-gray-100">
+              <thead className="bg-gray-100 dark:bg-neutral-800">
                 <tr>
                   <th className="p-3 text-left">Date</th>
                   <th className="p-3 text-left">Description</th>
@@ -371,7 +402,12 @@ export default function StatementForm({ transactions, accountBalance }) {
 
               <tbody>
                 {filteredTransactions.map((t) => (
-                  <tr key={t.id} className="border-t hover:bg-gray-50">
+                  <tr
+                    key={t.id}
+                    className="border-t 
+                      border-gray-200 dark:border-neutral-700
+                      hover:bg-gray-50 dark:hover:bg-neutral-800"
+                  >
                     <td className="p-3">
                       {new Date(t.date).toLocaleDateString()}
                     </td>
@@ -382,7 +418,7 @@ export default function StatementForm({ transactions, accountBalance }) {
                       className={`p-3 text-right font-medium ${
                         t.type === "EXPENSE"
                           ? "text-red-500"
-                          : "text-green-600"
+                          : "text-green-500"
                       }`}
                     >
                       {t.type === "EXPENSE" ? "-" : "+"}₹{t.amount}
