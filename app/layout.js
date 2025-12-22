@@ -5,6 +5,7 @@ import Footer from "@/components/footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "next-themes";
+import InstallPrompt from "@/components/InstallPrompt";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,7 +15,9 @@ export const metadata = {
   icons: {
     icon: "/favicon.jpg",
   },
+  manifest: '/manifest.json',
 };
+
 
 export default function RootLayout({ children }) {
   return (
@@ -24,8 +27,8 @@ export default function RootLayout({ children }) {
           <link rel="icon" href="/favicon.jpg" sizes="any" />
         </head>
 
-        {/* Notice attribute="class" — very important */}
         <body className={inter.className}>
+          <InstallPrompt />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

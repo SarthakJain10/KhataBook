@@ -1,5 +1,13 @@
+import withPWA from 'next-pwa';
+
+const withPWAFunc = withPWA({
+  dest: 'public',
+  register: true,
+  skipWaiting: true
+});
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig = withPWAFunc({
   images: {
     remotePatterns: [
       {
@@ -14,6 +22,6 @@ const nextConfig = {
       bodySizeLimit: "5mb",
     },
   },
-};
+});
 
 export default nextConfig;
