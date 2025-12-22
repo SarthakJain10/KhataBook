@@ -5,7 +5,6 @@ import Footer from "@/components/footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "next-themes";
-import InstallPrompt from "@/components/InstallPrompt";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,7 +27,6 @@ export default function RootLayout({ children }) {
         </head>
 
         <body className={inter.className}>
-          <InstallPrompt />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
