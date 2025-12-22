@@ -47,84 +47,84 @@ export const testimonialsData = [
   {
     name: "Riya Sharma, Delhi",
     role: "Small Business Owner",
-    image: "https://randomuser.me/api/portraits/women/75.jpg",
+    image: "/testimonials/woman1.jpeg",
     quote:
       "Helps me budget my salary and avoid end-of-month money stress. I can finally plan ahead and save for bigger goals without worrying about overspending.",
   },
   {
     name: "Amit Patel, Ahmedabad",
     role: "Financial Advisor",
-    image: "https://randomuser.me/api/portraits/men/75.jpg",
+    image: "/testimonials/man1.jpeg",
     quote:
       "Finally saving from my pocket money! Super easy to track expenses and monitor where every rupee goes, which makes managing finances much simpler.",
   },
   {
     name: "Sneha Nair, Bangalore",
     role: "Freelancer",
-    image: "https://randomuser.me/api/portraits/women/65.jpg",
+    image: "/testimonials/woman2.jpeg",
     quote:
       "No more paper registers — Khatabook handles all my daily accounts. It’s intuitive, fast, and keeps my finances organized even during busy workdays.",
   },
   {
     name: "Rohit Verma, Mumbai",
     role: "Startup Founder",
-    image: "https://randomuser.me/api/portraits/men/65.jpg",
+    image: "/testimonials/man2.jpeg",
     quote:
       "Khatabook has transformed the way I manage my startup’s finances. Tracking expenses, generating reports, and planning budgets has never been easier. Highly recommended!",
   },
   {
     name: "Priya Iyer, Chennai",
     role: "Software Engineer",
-    image: "https://randomuser.me/api/portraits/women/74.jpg",
+    image: "/testimonials/woman3.jpeg",
     quote:
       "I love how simple and clean the interface is. Managing daily expenses and monthly savings has become effortless for me.",
   },
   {
     name: "Karan Mehta, Pune",
     role: "College Student",
-    image: "https://randomuser.me/api/portraits/men/45.jpg",
+    image: "/testimonials/man3.jpeg",
     quote:
       "Earlier I used to overspend without realizing. Now I track every chai, movie and outing — and still manage to save a good amount every month.",
   },
   {
     name: "Pooja Desai, Surat",
     role: "Homepreneur",
-    image: "https://randomuser.me/api/portraits/women/70.jpg",
+    image: "/testimonials/woman4.jpeg",
     quote:
       "Perfect for managing home expenses and small business finances together. Everything is organized and clear, just like I wanted.",
   },
   {
     name: "Arjun Singh, Jaipur",
     role: "Shop Owner",
-    image: "https://randomuser.me/api/portraits/men/35.jpg",
+    image: "/testimonials/man4.jpeg",
     quote:
       "From daily sales tracking to monthly balance checking, this app has become my go-to partner for business management.",
   },
   {
     name: "Neha Gupta, Noida",
     role: "Marketing Professional",
-    image: "https://randomuser.me/api/portraits/women/22.jpg",
+    image: "/testimonials/woman5.jpeg",
     quote:
       "Earlier managing multiple expenses was stressful. Now everything is in one place — budget planning has become so much easier.",
   },
   {
     name: "Vikram Chauhan, Hyderabad",
     role: "IT Consultant",
-    image: "https://randomuser.me/api/portraits/men/4.jpg",
+    image: "/testimonials/man5.jpeg",
     quote:
       "Very reliable and accurate. Helps me stay disciplined with spending and ensures I always have savings left at the end of the month.",
   },
   {
     name: "Deepika Reddy, Hyderabad",
     role: "Working Professional",
-    image: "https://randomuser.me/api/portraits/women/24.jpg",
+    image: "/testimonials/woman6.jpeg",
     quote:
       "This app has brought real discipline into my spending habits. I can clearly see where my money goes and plan my month confidently.",
   },
   {
     name: "Manish Kumar, Kolkata",
     role: "Accountant",
-    image: "https://randomuser.me/api/portraits/men/14.jpg",
+    image: "/testimonials/man6.jpeg",
     quote:
       "Very simple yet powerful for everyday financial tracking. Whether personal or business expenses, everything stays organized in one place.",
   }
